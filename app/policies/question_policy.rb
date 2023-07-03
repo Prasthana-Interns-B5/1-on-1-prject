@@ -13,9 +13,19 @@ class QuestionPolicy
     @record = record
   end
 
+  def index
+    @employee.id == @record.manager_id || @employee.id == @record.employee_id
 
   def destroy?
     @employee.id == @record.employee_id
   end
+
+  def query_answer
+    @employee.manager? 
+  end  
+
+  def answer_opinion
+    @employee.id == @record.employee_id
+  end  
 
 end

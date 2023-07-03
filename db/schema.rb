@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_22_055330) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_03_100218) do
   create_table "answers", force: :cascade do |t|
     t.text "reply"
     t.integer "question_id", null: false
@@ -40,6 +40,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_22_055330) do
     t.integer "manager_id"
     t.string "manager_name"
     t.string "employee_no"
+    t.string "authentication_token", limit: 30
+    t.index ["authentication_token"], name: "index_employees_on_authentication_token", unique: true
     t.index ["email"], name: "index_employees_on_email", unique: true
     t.index ["jti"], name: "index_employees_on_jti", unique: true
     t.index ["manager_id"], name: "index_employees_on_manager_id"
@@ -80,6 +82,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_22_055330) do
     t.datetime "updated_at", null: false
     t.boolean "anonymous"
     t.integer "manager_id"
+    t.text "answer"
+    t.text "opinion"
     t.index ["employee_id"], name: "index_questions_on_employee_id"
   end
 

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+
   devise_for :employees, controllers: {
     sessions: "employees/sessions",
     registrations: "employees/registrations" }
@@ -11,10 +12,14 @@ Rails.application.routes.draw do
     get "managers", on: :collection
     put "role", on: :member
     get "reviews", on: :member
+    get "current_employee_info", on: :collection
   end
+
 
   resources :questions do
     get "replies", on: :member
+    put "query_answer", on: :member
+    put "answer_opinion", on: :member
   end
 
   resources :answers
@@ -29,6 +34,7 @@ Rails.application.routes.draw do
     put "manager_feedback", on: :member 
     put "comments", on: :member
   end
+
 end
 
 

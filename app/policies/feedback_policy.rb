@@ -11,6 +11,10 @@ class FeedbackPolicy < ApplicationPolicy
     @employee = employee
     @record = record
   end
+  
+  def index?
+    @employee.manager? 
+  end  
 
   def show?
     @employee.id == @record.employee_id || @employee.id == @record.manager_id
@@ -30,11 +34,11 @@ class FeedbackPolicy < ApplicationPolicy
   end
 
   def manager_feedback?
-    @employee.manager?
+    @employee.id == @record.manager_id
    end
 
    def comments?
-    @employee.subordinate? 
+    @employee.id == @record.employee_id 
    end
   
 end
