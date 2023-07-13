@@ -1,7 +1,6 @@
 class Employee < ApplicationRecord
 
-
-  include Devise::JWT::RevocationStrategies::JTIMatcher
+include Devise::JWT::RevocationStrategies::JTIMatcher
   validates :name,:role,presence: true
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
@@ -11,12 +10,14 @@ class Employee < ApplicationRecord
 
 
   
-  has_many :questions
-  has_many :answers
-  has_many :points
-  has_many :feedbacks
-  has_many :subordinates, class_name: "Employee", foreign_key: "reporting_manager_id"
-  belongs_to :manager, class_name: "Employee", optional: true
+  has_many :questions,dependent: :destroy
+  has_many :answers,dependent: :destroy
+  has_many :points,dependent: :destroy
+  has_many :feedbacks,dependent: :destroy
+  has_many :ur_leads, class_name: "Employee", foreign_key: "reporting_manager_id"
+  has_many :ur_sr_softwares, class_name: "Employee", foreign_key: "reporting_manager_id"
+  has_many :ur_software_engineers, class_name: "Employee", foreign_key: "reporting_manager_id"
+  belongs_to :ur_manager, class_name: "Employee", optional: true
 
 
   def self.filter(params)
@@ -34,6 +35,12 @@ class Employee < ApplicationRecord
       search_name = params[:name]
       employees = Employee.where(reporting_manager_id:id).where("LOWER(name) LIKE :query ", query: "%#{search_name}%")
     end
+  end
+
+  def self.update_associated_employees(manager)
+    leads=manager.ur_leads
+    leads.update_all(reporting_manager_id:nil)
+    debugger
   end
 
   def jwt_payload

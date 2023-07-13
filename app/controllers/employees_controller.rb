@@ -1,6 +1,6 @@
 class EmployeesController < ApplicationController
   before_action :find_params, except: [:index, :create, :current_employee_info] 
-  before_action :authorize_employee, except: [:index, :current_employee_info]
+  before_action :authorize_employee, except: [:index, :current_employee_info,:update]
 
   def index
     employee = Employee.all
@@ -21,6 +21,9 @@ class EmployeesController < ApplicationController
   end
 
   def destroy
+    if @employee.role=='ur_manager'
+      Employee.update_associated_employees(@employee)
+    end
     @employee.destroy
     render json: {message: "Record Destroyed Successfully"}
   end
